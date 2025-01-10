@@ -1,30 +1,23 @@
-import { Outlet, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes } from 'react-router-dom';
+import HomeLayout from '../pages/home/layout';
+import ContactPage from '../pages/home/contact';
+import NewContactPage from '../pages/home/new-contact';
+import AuthLayout from '../pages/auth/layout';
+import LoginPage from '../pages/auth/login';
+import RegisterPage from '../pages/auth/register';
 
 const Router = () => {
   return (
     <Routes>
-      <Route
-        path="home"
-        element={
-          <>
-            <div>Home</div> <Outlet />{' '}
-          </>
-        }
-      >
-        <Route path="contact/:contact-id" element={<div>Contact info</div>} />
-        <Route path="new-contact" element={<div>New Contact</div>} />
+      <Route path="home" element={<HomeLayout />}>
+        <Route path="contact/:contactId" element={<ContactPage />} />
+        <Route path="new-contact" element={<NewContactPage />} />
       </Route>
-      <Route
-        path="auth"
-        element={
-          <>
-            <div>Auth</div> <Outlet />{' '}
-          </>
-        }
-      >
-        <Route path="login" element={<div>Login</div>} />
-        <Route path="register" element={<div>Register</div>} />
+      <Route path="auth" element={<AuthLayout />}>
+        <Route path="login" element={<LoginPage />} />
+        <Route path="register" element={<RegisterPage />} />
       </Route>
+      <Route path="*" element={<Navigate to="/auth/login" />} />
     </Routes>
   );
 };
