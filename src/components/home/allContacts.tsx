@@ -5,6 +5,7 @@ import ContactCard from './contactCard';
 
 const ListContacts = () => {
   const token = localStorage.getItem('contacthub@authToken');
+  if (!token) return null;
   const contacts: Contact[] = listContacts(token!.split('_')[0]);
 
   return (

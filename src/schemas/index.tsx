@@ -6,7 +6,7 @@ export const contactSchema = z.object({
   cpf: z.string().regex(/^\d{3}\.\d{3}\.\d{3}-\d{2}$/, 'CPF inválido'),
   address: z.object({
     street: z.string().min(1, 'A rua é obrigatória'),
-    number: z.string().min(1, 'O número é obrigatório'),
+    number: z.coerce.number().min(1, 'O número é obrigatório'),
     complement: z.string().optional(),
     neighborhood: z.string().min(1, 'O bairro é obrigatório'),
     city: z.string().min(1, 'A cidade é obrigatória'),

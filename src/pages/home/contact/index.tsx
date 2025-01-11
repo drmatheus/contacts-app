@@ -1,11 +1,32 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import getContact from '../../../services/contacts/getContact';
 import GoogleMap from '../../../components/common/map';
+import { useState } from 'react';
+import deleteContact from '../../../services/contacts/deleteContact';
+import { toast } from 'react-toastify';
 
 const ContactPage = () => {
   const { contactId } = useParams();
 
+  const [isDeletingConfirmation, setIsDeletingConfirmation] = useState(false);
+
+  const navigate = useNavigate();
+
   const contact = getContact(contactId);
+
+  const toogleDelete = () => {
+    setIsDeletingConfirmation(!isDeletingConfirmation);
+  };
+
+  const handleDelete = async () => {
+    const token = localStorage.getItem('contacthub@authToken');
+    if (!token || !contactId) return;
+    {
+      deleteContact(token, contactId);
+      navigate('/home');
+      toast.success('Contato excluido com sucesso!');
+    }
+  };
 
   return (
     <>
@@ -14,11 +35,25 @@ const ContactPage = () => {
           <h1 className="col-span-2 text-2xl pb-1 border-b-2 border-primary  font-bold ">
             {contact.name}
           </h1>
-          <div>
+          <div
+            className="cursor-pointer"
+            onClick={() => {
+              navigator.clipboard.writeText(contact.phone);
+              toast.success(
+                'Número de telefone copiado para a área de transferência!'
+              );
+            }}
+          >
             <p>Telefone:</p>
             <p>{contact.phone}</p>
           </div>
-          <div>
+          <div
+            className="cursor-pointer"
+            onClick={() => {
+              navigator.clipboard.writeText(contact.cpf);
+              toast.success('CPF copiado para a área de transferência!');
+            }}
+          >
             <p>CPF:</p>
             <p>{contact.cpf}</p>
           </div>
@@ -59,10 +94,40 @@ const ContactPage = () => {
             <p>{contact.address.complement || 'Não informado'}</p>
           </div>
           <GoogleMap
-            className="col-span-2"
+            className="lg:col-span-2"
             latitude={contact.latitude}
             longitude={contact.longitude}
           />
+          <div className="ml-auto col-span-2 flex gap-2">
+            {isDeletingConfirmation ? (
+              <>
+                <p className="text-sm">
+                  Tem certeza que deseja excluir esse contato?
+                </p>
+                <button
+                  onClick={handleDelete}
+                  className="text-primary hover:underline hover:bold text-sm px-2"
+                >
+                  Sim
+                </button>
+
+                <p className="text-sm">/</p>
+                <button
+                  onClick={toogleDelete}
+                  className="text-primary hover:underline hover:bold text-sm px-2"
+                >
+                  Nao
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={toogleDelete}
+                className="text-primary hover:underline hover:bold text-sm"
+              >
+                Excluir contato
+              </button>
+            )}
+          </div>
         </div>
       ) : (
         <h1>Contato não encontrado</h1>

@@ -9,7 +9,7 @@ const fetchCoordinates = async (address: string) => {
     )}&key=${apiKey}`
   );
   const data = await response.json();
-  console.log(data);
+
   if (data.results.length > 0) {
     const location = data.results[0].geometry.location;
     return { lat: location.lat, lng: location.lng };
@@ -22,7 +22,7 @@ const createContact = async (token: string, contact: ContactSchema) => {
   const userId = token.split('_')[0];
 
   try {
-    // Obtemer os contatos do localStorage e verificar se o CPF ja foi cadastrado
+    // Obter os contatos do localStorage e verificar se o CPF ja foi cadastrado
     const existingContacts = JSON.parse(
       localStorage.getItem('contacthub@contacts') || '[]'
     );

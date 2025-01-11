@@ -123,6 +123,7 @@ const ContactForm = () => {
         label="Número"
         {...register('address.number')}
         placeholder="123"
+        type="number"
         error={errors.address?.number?.message}
       />
       <Input

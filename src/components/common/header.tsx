@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaBook, FaDoorOpen } from 'react-icons/fa';
 import { useState } from 'react';
 import Button from './button';
@@ -10,8 +10,11 @@ const Header = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const navigate = useNavigate();
+
   const handleLogout = () => {
-    console.log('Logout');
+    localStorage.removeItem('contacthub@authToken');
+    navigate('/auth/login');
   };
 
   return (
@@ -38,10 +41,10 @@ const Header = () => {
           </li>
           <li>
             <Link
-              to="contact"
+              to="profile"
               className="rounded-lg bg-offwhite flex items-center gap-2 px-4 py-2"
             >
-              Contatos
+              Perfil
             </Link>
           </li>
           <li>
@@ -76,8 +79,8 @@ const Header = () => {
               </Link>
             </li>
             <li onClick={toggleMenu}>
-              <Link to="/contact" className="block py-2">
-                Contatos
+              <Link to="/profile" className="block py-2">
+                Perfil
               </Link>
             </li>
             <li onClick={toggleMenu}>

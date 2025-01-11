@@ -5,6 +5,7 @@ import NewContactPage from '../pages/home/new-contact';
 import AuthLayout from '../pages/auth/layout';
 import LoginPage from '../pages/auth/login';
 import RegisterPage from '../pages/auth/register';
+import Profile from '../pages/home/profile';
 
 const Router = () => {
   return (
@@ -12,6 +13,7 @@ const Router = () => {
       <Route path="home" element={<HomeLayout />}>
         <Route path="contact/:contactId" element={<ContactPage />} />
         <Route path="new-contact" element={<NewContactPage />} />
+        <Route path="profile" element={<Profile />} />
       </Route>
       <Route path="auth" element={<AuthLayout />}>
         <Route path="login" element={<LoginPage />} />

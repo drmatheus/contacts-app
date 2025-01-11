@@ -13,6 +13,7 @@ const HomeLayout = () => {
   useEffect(() => {
     //Valida se o token existe
     const token = localStorage.getItem('contacthub@authToken');
+
     if (!token) {
       toast.error('Usuário não autenticado. Redirecionando para login...');
       navigate('/auth/login');
