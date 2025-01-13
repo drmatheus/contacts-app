@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { ContactSchema } from '../../schemas/contact/contact';
 import { Contact } from '../../types/contact';
 import fetchCoordinates from '../../utils/getCoordinates';
