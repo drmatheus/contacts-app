@@ -6,6 +6,7 @@ import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import validateToken from '../../services/auth/validateToken';
 import ListContacts from '../../components/home/allContacts';
+import { ContactProvider } from '../../context/contact';
 
 const HomeLayout = () => {
   const navigate = useNavigate();
@@ -34,14 +35,13 @@ const HomeLayout = () => {
   }, []);
 
   return (
-    <>
+    <ContactProvider>
       <Header />
-
       <Container>
         <ListContacts />
         <Outlet />
       </Container>
-    </>
+    </ContactProvider>
   );
 };
 

@@ -21,7 +21,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           name={name}
           id={`${name}-${inputId}`}
-          className={`px-3 py-2 border border-slate-200 text-gray-700  bg-slate-50 rounded-lg focus:outline-none focus:border-primary placeholder:text-gray-400 ${className}`}
+          className={`px-3 py-2 border border-slate-200 text-gray-700  bg-slate-50 rounded-lg focus:outline-none focus:border-primary placeholder:text-gray-400 ${className} ${
+            rest.disabled && 'border-transparent bg-transparent'
+          }`}
         />
         {error && <small className="text-xs text-red-400">{error}</small>}
       </label>

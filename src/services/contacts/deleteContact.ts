@@ -1,4 +1,4 @@
-import { Contact } from '../../schemas/contact/contact';
+import { Contact } from '../../types/contact';
 
 const deleteContact = async (token: string, contactId: string) => {
   // Extrair o ID do usuário do token

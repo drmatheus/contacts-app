@@ -9,14 +9,21 @@ import brazilStates from '../../utils/brazilStates';
 import formatCep from '../../utils/formatCep';
 import formatCpf from '../../utils/formatCPF';
 import formatPhone from '../../utils/formatPhone';
-import createContact from '../../services/contacts/createContact';
 import { useNavigate } from 'react-router-dom';
 import { contactSchema, ContactSchema } from '../../schemas/contact/contact';
 import InputAddress from '../common/inputAddress';
-import { useContact } from '../../context/contact';
+import { Contact } from '../../types/contact';
+import updateContact from '../../services/contacts/updateContact';
 import { Address } from '../../schemas/googleApi/address';
 
-const ContactForm = () => {
+type EditContactFormProps = {
+  contact: Contact;
+};
+
+const EditContactForm = ({ contact }: EditContactFormProps) => {
+  const navigate = useNavigate();
+  const [addressSuggestion, setAddressSuggestion] = useState<Address | null>();
+
   const {
     register,
     handleSubmit,
@@ -27,10 +34,23 @@ const ContactForm = () => {
   } = useForm<ContactSchema>({
     mode: 'onBlur',
     resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: contact.name,
+      phone: contact.phone,
+      cpf: contact.cpf,
+      address: {
+        street: contact.address.street,
+        number: Number(contact.address.number),
+        complement: contact.address.complement,
+        neighborhood: contact.address.neighborhood,
+        city: contact.address.city,
+        state: contact.address.state,
+        zipcode: contact.address.zipcode,
+      },
+    },
   });
-  const navigate = useNavigate();
-  const [addressSuggestion, setAddressSuggestion] = useState<Address>({});
-  const { getData } = useContact();
+
+  // Funcionalidade para preencher os campos do formulário com os dados do CEP
   const handleCepChange = async (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
@@ -64,27 +84,28 @@ const ContactForm = () => {
     }
   };
 
+  // Função de submit
   const onSubmit = useCallback(async (data: ContactSchema) => {
     try {
       const token = localStorage.getItem('contacthub@authToken');
-      const newContact = await createContact(token!, data);
+      await updateContact(token!, data, contact.id);
 
-      toast.success('Contato enviado com sucesso!');
+      toast.success('Contato atualizado com sucesso!');
       reset();
 
-      getData();
-
-      navigate(`/home/contact/${newContact!.id}`);
+      navigate(`/home/contact/${contact.id}`);
     } catch (error) {
       if (error instanceof Error) {
         toast.error(error.message);
-
-        console.error('Erro ao salvar contato:', error.message);
+        console.error('Erro ao atualizar contato contato:', error.message);
       }
     }
   }, []);
 
+  // Função para preencher os campos do formulário quando o usuário selecionar uma sugestão
   const onSelectSuggestion = () => {
+    if (!addressSuggestion) return;
+
     setValue('address.street', addressSuggestion.street || '');
     setValue('address.neighborhood', addressSuggestion.neighborhood || '');
     setValue('address.city', addressSuggestion.city || '');
@@ -99,11 +120,11 @@ const ContactForm = () => {
 
   return (
     <form
-      className="grid grid-cols-1 lg:grid-cols-2  gap-5  bg-primary/5 p-4 py-8 w-full rounded-xl shadow-lg "
+      className="grid grid-cols-1 lg:grid-cols-2 col-span-2  gap-5  bg-primary/5 p-4 py-8 w-full rounded-xl shadow-lg "
       onSubmit={handleSubmit(onSubmit)}
     >
-      <h1 className="text-2xl font-bold lg:col-span-2 text-primary">
-        Novo contato
+      <h1 className="text-2xl flex justify-between font-bold lg:col-span-2 text-primary">
+        <p>Editando - {contact.name}</p>
       </h1>
       <h2 className="lg:col-span-2 text-primary font-semibold text-lg border-b-2 border-primary">
         Informações pessoais
@@ -137,6 +158,7 @@ const ContactForm = () => {
         setAddressSuggestion={setAddressSuggestion}
         containerClassName="col-span-2"
       />
+
       <Input
         label="CEP"
         {...register('address.zipcode')}
@@ -181,11 +203,10 @@ const ContactForm = () => {
         error={errors.address?.state?.message}
         options={brazilStates}
       />
-      <div className="lg:col-span-2 mt-2 ">
-        <Button className="w-full" text="Enviar" type="submit" />
-      </div>
+
+      <Button className="w-full col-span-2" text="Salvar" type="submit" />
     </form>
   );
 };
 
-export default ContactForm;
+export default EditContactForm;

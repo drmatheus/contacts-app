@@ -1,4 +1,4 @@
-import { Contact } from '../../schemas/contact/contact';
+import { Contact } from '../../types/contact';
 
 const getContact = (contactId: string | undefined) => {
   // Extrair o ID do usuário do token

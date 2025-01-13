@@ -6,12 +6,16 @@ import AuthLayout from '../pages/auth/layout';
 import LoginPage from '../pages/auth/login';
 import RegisterPage from '../pages/auth/register';
 import Profile from '../pages/home/profile';
+import Home from '../pages/home/home';
+import EditContactPage from '../pages/home/edit-contact';
 
 const Router = () => {
   return (
     <Routes>
       <Route path="home" element={<HomeLayout />}>
+        <Route index element={<Home />} />
         <Route path="contact/:contactId" element={<ContactPage />} />
+        <Route path="edit-contact/:contactId" element={<EditContactPage />} />
         <Route path="new-contact" element={<NewContactPage />} />
         <Route path="profile" element={<Profile />} />
       </Route>

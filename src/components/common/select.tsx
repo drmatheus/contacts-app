@@ -25,10 +25,9 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           ref={ref}
           name={name}
           id={`${name}-${selectId}`}
-          className={`px-3 py-2 border border-slate-200 text-gray-700  bg-slate-50 rounded-lg focus:outline-none focus:border-primary placeholder:text-gray-400 ${className}`}
+          className={`px-3 py-2 border border-slate-200 text-gray-700  bg-slate-50 rounded-lg disabled:text-black disabled:border-transparent disabled:bg-transparent disabled:appearance-none focus:outline-none focus:border-primary placeholder:text-gray-400 ${className} `}
         >
           <option value="">Selecione uma opção</option>
-
           {options.map((option) => (
             <option key={option.value} value={option.value}>
               {option.label}

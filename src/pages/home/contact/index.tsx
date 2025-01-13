@@ -1,9 +1,10 @@
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import getContact from '../../../services/contacts/getContact';
 import GoogleMap from '../../../components/common/map';
 import { useState } from 'react';
 import deleteContact from '../../../services/contacts/deleteContact';
 import { toast } from 'react-toastify';
+import { FaPencilAlt } from 'react-icons/fa';
 
 const ContactPage = () => {
   const { contactId } = useParams();
@@ -21,20 +22,21 @@ const ContactPage = () => {
   const handleDelete = async () => {
     const token = localStorage.getItem('contacthub@authToken');
     if (!token || !contactId) return;
-    {
-      deleteContact(token, contactId);
-      navigate('/home');
-      toast.success('Contato excluido com sucesso!');
-    }
+    deleteContact(token, contactId);
+    navigate('/home');
+    toast.success('Contato excluido com sucesso!');
   };
 
   return (
     <>
       {contact ? (
-        <div className="grid grid-cols-1 gap-4 bg-primary/5 p-4 rounded-lg lg:grid-cols-2 text-offblack font-semibold text-lg">
-          <h1 className="col-span-2 text-2xl pb-1 border-b-2 border-primary  font-bold ">
-            {contact.name}
-          </h1>
+        <div className="grid grid-cols-1 shadow-lg gap-4 bg-primary/5 p-4 rounded-lg lg:grid-cols-2 text-offblack font-semibold ">
+          <div className=" flex justify-between col-span-2 pb-1 border-b-2 border-primary items-center">
+            <h1 className=" text-2xl y  font-bold ">{contact.name}</h1>
+            <Link to={`/home/edit-contact/${contact.id}`}>
+              <FaPencilAlt size={16} className="mr-2" />
+            </Link>
+          </div>
           <div
             className="cursor-pointer"
             onClick={() => {
@@ -94,7 +96,7 @@ const ContactPage = () => {
             <p>{contact.address.complement || 'Não informado'}</p>
           </div>
           <GoogleMap
-            className="lg:col-span-2"
+            className="col-span-2"
             latitude={contact.latitude}
             longitude={contact.longitude}
           />

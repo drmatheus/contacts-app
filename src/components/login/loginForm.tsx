@@ -24,7 +24,6 @@ const LoginForm = () => {
     try {
       const token = login(data.email, data.password);
       localStorage.setItem('contacthub@authToken', token!);
-      console.log(token);
       toast.success('Login efetuado com sucesso!');
       navigate('/home');
     } catch (error) {
